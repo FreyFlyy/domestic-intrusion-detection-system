@@ -20,21 +20,23 @@ Designed for **home labs** and **constrained environments**, it prioritizes **lo
 9. [Screenshots](#screenshots-dark-theme)
 10. [Author & License](#author)
 
+---
+
 ## New version (v2.0)!
 
 * **Dropdown Tables for Graylist/Watchlist**: Each metric now shows **Last Update** and **useful metrics**. These include:
-    * SYN/ACK → Number of SYNs and ACKs
-    * Port Entropy → Observed ports
-    * Std Δt → Mean interval between packets
-    * Max PPS → Time window of the 95th percentile and total packets
+    * **SYN/ACK** → Number of SYNs and ACKs
+    * **Port Entropy** → Observed ports
+    * **Std Δt** → Mean interval between packets
+    * **Max PPS** → Time window of the 95th percentile and total packets
 * **Duplicate IP Handling**: **Multiple IP** entries are **skipped** to avoid inconsistencies.
 * **Telegram Bot Integration** (Optional): Configurable notifications for **alerts** and **graylistings**.
 * **Authentication**:
-    * `/login` - requires username and password
-    * `/logout` - added button on the bottom right
+    * `/login` - requires **username** and **password**
+    * `/logout` - added **button** on the bottom right
 * **PPS Calculation**: Uses **95th percentile window**; if traffic is concentrated in **short bursts**, the **full capture duration** is considered to **smooth regular traffic spikes**.
 * Added **Last Seen** and a **Notes field** in **Observed Hosts list** (personalized notes, can be used to **identify devices/services** or keep track of **attack patterns**)
-* Sensitive configuration moved to `.env` file (industry standard)
+* **Sensitive data** moved to `.env` file (industry standard)
 * **Ephemeral ports** (≥ 49152) are now **ignored** for analysis (as they're rarely scanned and mostly used by clients for temporary connections, so they could false some IPs)
 
 ## Project Structure
@@ -135,12 +137,12 @@ A **modern** interface for **real-time monitoring** and **administrative control
     ```
 4.  **Start the backend:**
     ```bash
-    /path/to/virtual/environment/bin/python3 /path/to/ids_server.py
+    python ./ids_server.py
     ```
 
 **NOTE:**
 * Remember to set the correct network interface in `config.py` under the `IFACE` variable (default is `wlan0`).
-* **REMEMBER TO CHANGE THE USERNAME AND PASSWORD FOR THE LOGIN PAGE!** (default are "admin" and "password"). Edit the `.env` file by pasting the SHA256 hash of YOUR PERSONALIZED username and password (you can use different tools to calculate SHA256 of a string, such as [this one](https://emn178.github.io/online-tools/sha256.html)
+* **REMEMBER TO CHANGE THE USERNAME AND PASSWORD FOR THE LOGIN PAGE!**. Edit the `.env` file by pasting the **SHA256 hash** of **YOUR PERSONALIZED username and password** (you can use different tools to calculate SHA256 of a string, such as [this one](https://emn178.github.io/online-tools/sha256.html))
 
     
 ## Screenshots (dark theme)
