@@ -1,0 +1,160 @@
+/* THEME VARIABLES */
+:root {
+  --bg: #f8f9fa;
+  --text: #212529;
+  --accent: #0d6efd;
+  --danger: #dc3545;
+  --card: #ffffff;
+  --border: #ddd;
+  --muted: #adb5bd;
+}
+
+body.dark-theme {
+  --bg: #121212;
+  --text: #e9ecef;
+  --accent: #4dabf7;
+  --danger: #ff6b6b;
+  --card: #1e1e1e;
+  --border: #2c2c2c;
+  --muted: #adb5bd;
+}
+
+/* BASE STYLE */
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 1.5rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.tab {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* GRIDS & CARDS */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  background: var(--card);
+  padding: 1.25rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* TITLES WITH BUTTONS */
+
+.card h2:has(button) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+/* CHARTS */
+
+.chart-container {
+  height: 300px;
+}
+
+
+/* TABLES */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  vertical-align: middle;
+}
+
+th {
+  background: color-mix(in srgb, var(--card) 90%, var(--text));
+}
+
+td code {
+  display: block;
+  text-align: center;
+}
+/*
+.graylist-dropdown td {
+    background-color: #f9f9f9;
+    border-top: 1px solid #ccc;
+    padding: 8px;
+}
+.graylist-dropdown table {
+    border-collapse: collapse;
+}
+.graylist-dropdown th, .graylist-dropdown td {
+    border: 1px solid #ddd;
+    padding: 4px 8px;
+}
+*/
+/* STATS & MESSAGES */
+
+.error {
+  display: none;
+  background: #fff5f5;
+  color: var(--danger);
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--muted);
+  padding: 1.5rem;
+}
+
+.status {
+  text-align: right;
+  font-size: 0.85rem;
+  margin-top: 2rem;
+}

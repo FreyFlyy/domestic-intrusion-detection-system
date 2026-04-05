@@ -1,0 +1,250 @@
+<<!-- index.html -->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IDS Monitor</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>IDS Monitor</h1>
+    <p>Live traffic analyzer and anomaly detection</p>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="tab-overview">Overview</button>
+      <button class="tab-btn" data-tab="tab-lists">Lists</button>
+      <button class="tab-btn" data-tab="tab-settings">Settings</button>
+    </nav>
+  </header>
+  <div id="error-message" class="error"></div>
+
+  <!-- ================= OVERVIEW tab ================= -->
+
+  <section id="tab-overview" class="tab-content active">
+
+    <!-- Time Statistics -->
+    <div class="grid">
+      <div class="card">
+        <h2>Time statistics</h2>
+        <div class="chart-container">
+          <canvas id="statsChart"></canvas>
+        </div>
+      </div>
+      
+      <!-- Top Senders -->
+      <div class="card">
+        <h2>Top Sources (last hour)</h2>
+        <div class="chart-container">
+          <canvas id="topSendersChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Graylist -->
+    <div class="card">
+      <h2>Graylist - Suspicious IPs</h2>
+      <div style="overflow-x:auto;">
+        <table id="graylist-table">
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>Score</th>
+              <th>Flags</th>
+              <th>SYN/ACK</th>
+              <th>Port entropy</th>
+              <th>Std Δt</th>
+              <th>Max PPS</th>
+              <th>Action(s)</th>
+              <th>Links</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div id="graylist-empty" class="empty-state">No suspicious IPs</div>
+      </div>
+
+      <!-- Watchlist -->
+      <h2>Watchlist - Monitored IPs</h2>
+      <table id="lists-watchlist-table">
+        <thead>
+          <tr>
+            <th>IP</th>
+            <th>SYN/ACK</th>
+            <th>Port entropy</th>
+            <th>Std Δt</th>
+            <th>PPS</th>
+            <th>Action(s)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="empty-state" id="lists-watchlist-empty">No monitored IPs</div>
+    </div>
+
+  </section>
+
+  <!-- ================= LISTS tab ================= -->
+
+  <section id="tab-lists" class="tab-content">
+
+    <!-- Observed Hosts -->
+    <div class="card">
+      <h2>
+        Observed Hosts (last 24h)
+        <button onclick="toggleListsHosts()">▼</button>
+      </h2>
+      <div id="lists-hosts-container" style="display:none;">
+        <table id="lists-hosts-table">
+        <thead>
+          <tr>
+            <th>IP</th>
+            <th>MAC</th>
+            <th>Name</th>
+            <th>Last Seen</th>
+            <th>Notes</th>
+            <th>Action(s)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="empty-state" id="lists-hosts-empty">No hosts</div>
+    </div>
+
+    <!-- Graylist -->
+    <div class="card">
+      <h2>Graylist</h2>
+      <table id="lists-graylist-table">
+        <thead>
+          <tr>
+            <th>IP</th>
+            <th>Score</th>
+            <th>Flags</th>
+            <th>SYN/ACK</th>
+            <th>Port Entropy</th>
+            <th>Std Δt</th>
+            <th>Max PPS</th>
+            <th>Action(s)</th>
+            <th>Links</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="empty-state" id="lists-graylist-empty">No suspicious IPs</div>
+    </div>
+
+    <!-- Watchlist -->
+    <div class="card">
+      <h2>Watchlist</h2>
+      <table id="lists-watchlist-table-lists">
+        <thead>
+          <tr>
+            <th>IP</th>
+            <th>SYN/ACK</th>
+            <th>Port entropy</th>
+            <th>Std Δt</th>
+            <th>PPS</th>
+            <th>Action(s)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="empty-state" id="lists-watchlist-empty-lists">No monitored IPs</div>
+    </div>
+
+    <!-- Whitelist -->
+    <div class="card">
+      <h2>
+        WhiteList
+      </h2>
+      <table id="lists-whitelist-table">
+        <thead>
+          <tr>
+            <th>IP</th>
+            <th>Action(s)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="empty-state" id="lists-whitelist-empty">No whitelisted IPs</div>
+    </div>
+
+  </section>
+
+
+  <!-- ================= SETTINGS ================= -->
+  <section id="tab-settings" class="tab-content">
+    <div class="card">
+
+      <h2>Triggers - IDS Thresholds</h2>
+      <form id="settings-form">
+        <div class="setting-item">
+          <label for="pps_threshold">PPS Threshold:</label>
+          <input type="number" id="pps_threshold" name="pps_threshold" step="1">
+        </div>
+        <div class="setting-item">
+          <label for="entropy_threshold">Entropy Threshold:</label>
+          <input type="number" id="entropy_threshold" name="entropy_threshold" step="0.01">
+        </div>
+        <div class="setting-item">
+          <label for="synack_threshold">SYN/ACK Threshold:</label>
+          <input type="number" id="synack_threshold" name="synack_threshold" step="0.05">
+        </div>
+        <div class="setting-item">
+          <label for="max_std_timestamp">Min STD Δt:</label>
+          <input type="number" id="max_std_timestamp" name="max_std_timestamp" step="0.001">
+        </div>
+        <div class="setting-item">
+          <label for="min_syn_count">Min SYN Count:</label>
+          <input type="number" id="min_syn_count" name="min_syn_count" step="1">
+        </div>
+        <br>
+        <button type="submit">Save IDS Thresholds</button>
+      </form>
+      <div id="settings-status" class="empty-state"></div>
+
+      <h2>Score calculation – Penalties</h2>
+      <form id="penalties-form">
+        <div class="setting-item">
+          <label for="Packet flood">Packet flood (PPS):</label>
+          <input type="number" id="Packet flood" name="Packet flood" step="1">
+        </div>
+        <div class="setting-item">
+          <label for="SYN flood">SYN flood (SYN/ACK):</label>
+          <input type="number" id="SYN flood" name="SYN flood" step="1">
+        </div>
+        <div class="setting-item">
+          <label for="Port scan">Port scan (Entropy):</label>
+          <input type="number" id="Port scan" name="Port scan" step="1">
+        </div>
+        <div class="setting-item">
+          <label for="Regular intervals">Regular intervals (std Δt):</label>
+          <input type="number" id="Regular intervals" name="Regular intervals" step="1">
+        </div>
+        <div class="setting-item">
+          <label for="Score minimo per alert">Min. Score for Alert:</label>
+          <input type="number" id="Score minimo per alert" name="Score minimo per alert" step="1">
+        </div>
+        <br>
+        <button type="submit">Save Penalties</button>
+      </form>
+      <div id="penalties-status" class="empty-state"></div>
+
+    </div>
+  </section>
+
+
+  <footer class="status">
+    <button onclick="logout()">Logout</button>
+    <button id="theme-toggle" title="Toggle theme">Dark 🌙</button>
+  </footer>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>>
