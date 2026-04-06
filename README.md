@@ -15,10 +15,10 @@ Designed for **home labs** and **constrained environments**, it prioritizes **lo
 3. [Workflow & Logic](#workflow--logic)
 4. [Technologies Used](#technologies-used)
 5. [Performance](#performance)
-7. [Known Criticalities](#known-criticalities)
-8. [Future Implementations](#possible-future-implementations)
-9. [Screenshots](#screenshots-dark-theme)
-10. [Author & License](#author)
+6. [Known Criticalities](#known-criticalities)
+7. [Future Implementations](#possible-future-implementations)
+8. [Screenshots](#screenshots-dark-theme)
+9. [Author & License](#author)
 
 ---
 
@@ -135,7 +135,20 @@ A **modern** interface for **real-time monitoring** and **administrative control
     ```bash
     pip install -r requirements.txt
     ```
-4.  **Start the backend:**
+
+4.  **Change the Network Interface (default `wlan0`):**
+    ```bash
+    nano config.py
+    ```
+    And edit the `IFACE` variable as needed (es. any, eth0, ...)
+
+5.  **Edit `.env` file**
+    ```bash
+    nano .env
+    ```
+    Put the **hashes** of your chosen **username** and **password** (***DO NOT SHARE***) and, optionally, configure a **telegram bot** by providing `TELEGRAM_TOKEN` and `TELEGRAM_CHAT_ID` (and setting `USE_TELEGRAM` as True)
+
+6.  **Start the IDS:**
     ```bash
     python ./ids_server.py
     ```
