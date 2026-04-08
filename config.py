@@ -23,8 +23,8 @@ PENALTIES = {
 }
 
 IFACE = "wlan0"     # tshark Interface on which to listen on (default "wlan0")
-PORT = 8080     # port for the web serveru
-IP = "100.87.3.45"   # IP address of the server to (specify, else it will be taken the local IP of the machine)
+PORT = 8080     # port for the web server
+IP = None   # IP address of the server to (ex. "1.2.3.4", else leave it to None to take the local IP of the machine)
 CAPTURE_DURATION = 5    # dump time (in seconds)
 MAX_PACKETS_BUFFER = 5000   # max packets to store in memory in each dump
 STATS_KEEP = 300    # max time history on overview charts (in seconds)
