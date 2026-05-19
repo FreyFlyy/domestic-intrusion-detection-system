@@ -1,0 +1,480 @@
+<!-- index.html -->
+
+<!--
+   Copyright (C) 2026 Francesco Scolz
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program. If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LightIDS monitor</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<a href="https://github.com/FreyFlyy/light-ids" target="_blank" rel="noopener noreferrer">
+  <img class="logo">
+</a>
+
+<div class="container">
+
+  <!-- ================= HEADER ================= -->
+
+  <header>
+    <h1>LightIDS Monitor</h1>
+    <p>Live traffic analyzer and anomaly detection</p>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="tab-overview">
+        Overview
+      </button>
+
+      <button class="tab-btn" data-tab="tab-lists">
+        Lists
+      </button>
+
+      <button class="tab-btn" data-tab="tab-settings">
+        Settings
+      </button>
+    </nav>
+  </header>
+
+  <div id="error-message" class="error"></div>
+
+
+  <!-- ================= OVERVIEW TAB ========================== -->
+
+
+  <section id="tab-overview" class="tab-content active">
+
+    <!-- Charts -->
+
+    <div class="grid">
+
+      <!-- Time statistics -->
+
+      <div class="card">
+        <h2>Time statistics</h2>
+
+        <div class="chart-container">
+          <canvas id="statsChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Top senders -->
+
+      <div class="card">
+        <h2 id="top-sources-title">Top Senders</h2>
+
+        <div class="chart-container">
+          <canvas id="topSendersChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Graylist -->
+
+    <div class="card">
+
+      <h2>Graylist - Suspicious IPs</h2>
+
+      <div class="table-wrapper">
+
+        <table id="graylist-table">
+
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>Score</th>
+              <th>Flags</th>
+              <th>SYN/ACK</th>
+              <th>RST-ed/SYN</th>
+              <th>Port entropy</th>
+              <th>Std intervals</th>
+              <th>Max PPS</th>
+              <th>Action(s)</th>
+              <th>Links</th>
+            </tr>
+          </thead>
+
+          <tbody></tbody>
+
+        </table>
+
+        <div id="graylist-empty" class="empty-state">
+          No suspicious IPs
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Watchlist -->
+
+    <div class="card">
+
+      <h2>Watchlist - Monitored IPs</h2>
+
+      <div class="table-wrapper">
+
+        <table id="overview-watchlist-table">
+
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>SYN/ACK</th>
+              <th>RST-ed/SYN</th>
+              <th>Port entropy</th>
+              <th>Std intervals</th>
+              <th>PPS</th>
+              <th>Action(s)</th>
+            </tr>
+          </thead>
+
+          <tbody></tbody>
+
+        </table>
+
+        <div id="overview-watchlist-empty" class="empty-state">
+          No monitored IPs
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================== LISTS TAB ========================= -->
+
+
+  <section id="tab-lists" class="tab-content">
+
+    <!-- Hosts -->
+
+    <div class="card">
+
+      <h2>
+        Observed Hosts (last 24h)
+
+        <button onclick="toggleTable('lists-hosts-container')">
+          ▼
+        </button>
+      </h2>
+
+      <div id="lists-hosts-container" style="display:none;">
+
+        <div class="table-wrapper">
+
+          <table id="lists-hosts-table">
+
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>MAC</th>
+                <th>Name</th>
+                <th>Last Seen</th>
+                <th>Notes</th>
+                <th>Action(s)</th>
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+
+          </table>
+
+        </div>
+
+        <div id="lists-hosts-empty" class="empty-state">
+          No hosts
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Graylist -->
+
+    <div class="card">
+
+      <h2>
+        Graylist
+
+        <button onclick="toggleTable('lists-graylist-container')">
+          ▼
+        </button>
+      </h2>
+
+      <div id="lists-graylist-container" style="display:block;">
+
+        <div class="table-wrapper">
+
+          <table id="lists-graylist-table">
+
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>Score</th>
+                <th>Flags</th>
+                <th>SYN/ACK</th>
+                <th>RST-ed/SYN</th>
+                <th>Port entropy</th>
+                <th>Std intervals</th>
+                <th>Max PPS</th>
+                <th>Action(s)</th>
+                <th>Links</th>
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+
+          </table>
+
+        </div>
+
+        <div id="lists-graylist-empty" class="empty-state">
+          No suspicious IPs
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Watchlist -->
+
+    <div class="card">
+
+      <h2>
+        Watchlist
+
+        <button onclick="toggleTable('lists-watchlist-container')">
+          ▼
+        </button>
+      </h2>
+
+      <div id="lists-watchlist-container" style="display:block;">
+
+        <div class="table-wrapper">
+
+          <table id="lists-watchlist-table">
+
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>SYN/ACK</th>
+                <th>RST-ed/SYN</th>
+                <th>Port entropy</th>
+                <th>Std intervals</th>
+                <th>PPS</th>
+                <th>Action(s)</th>
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+
+          </table>
+
+        </div>
+
+        <div id="lists-watchlist-empty" class="empty-state">
+          No monitored IPs
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Whitelist -->
+
+    <div class="card">
+
+      <h2>
+        Whitelist
+
+        <button onclick="toggleTable('lists-whitelist-container')">
+          ▼
+        </button>
+      </h2>
+
+      <div id="lists-whitelist-container" style="display:block;">
+
+        <div class="table-wrapper">
+
+          <table id="lists-whitelist-table">
+
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>Action(s)</th>
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+
+          </table>
+
+        </div>
+
+        <div id="lists-whitelist-empty" class="empty-state">
+          No whitelisted IPs
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==================== SETTINGS TAB ======================= -->
+
+
+  <section id="tab-settings" class="tab-content">
+
+    <div class="card">
+
+      <!-- IDS thresholds -->
+
+      <h2>Triggers - IDS Thresholds</h2>
+
+      <form id="thresholds-form">
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Minimum ratio of SYN packets to ACK packets to reach before triggering a SYN flood attack" for="synack_threshold">SYN/ACK Threshold:</label>
+          <input type="number" id="synack_threshold" name="synack_threshold" step="0.01">
+        </div>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Minimum number of SYN packets to reach before triggering a SYN flood attack" for="min_syn_count">Min SYN Count:</label>
+          <input type="number" id="min_syn_count" name="min_syn_count" step="1">
+        </div>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Minimum ratio of RST packets to SYN packets to reach before triggering a Connection probing attack" for="rstsyn_ratio">RST/SYN Threshold:</label>
+          <input type="number" id="rstsyn_ratio" name="rstsyn_ratio" step="0.01">
+        </div>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Minimum number of RST packets to reach before triggering a Connection probing attack" for="min_rst_count">Min RST Count:</label>
+          <input type="number" id="min_rst_count" name="min_rst_count" step="1">
+        </div>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Minimum Shannon's entropy value to reach before triggering a Port scan attack" for="entropy_threshold">Entropy Threshold:</label>
+          <input type="number" id="entropy_threshold" name="entropy_threshold" step="0.01">
+        </div>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Minimum standard deviation between packet intervals to reach before triggering a Regular intervals attack" for="max_std_timestamp">Min Std intervals:</label>
+          <input type="number" id="max_std_timestamp" name="max_std_timestamp" step="0.001">
+        </div>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Minimum number of packets per second (captured over ${CAPTURE_DURATION}s) to reach before triggering a Packet flood attack" for="pps_threshold">PPS Threshold:</label>
+          <input type="number" id="pps_threshold" name="pps_threshold" step="1">
+        </div>
+
+        <br>
+
+        <button type="submit">
+          Save IDS Thresholds
+        </button>
+
+      </form>
+
+      <div id="thresholds-status" class="empty-state"></div>
+
+      <!-- Penalties -->
+
+      <h2>Score calculation – Penalties</h2>
+
+      <form id="penalties-form">
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Penalty for SYN flood attacks (SYN/ACK ratio)" for="SYN flood">SYN flood (SYN/ACK):</label>
+          <input type="number" id="SYN flood" name="SYN flood" step="1">
+        </div>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Penalty for Connection probing attacks (RST-ed/SYN)" for="Connection probing">Connection Probing (RST-ed/SYN)</label>
+          <input type="number" id="Connection probing" name="Connection probing" step="1">
+        </div>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Penalty for Port scan attacks (Entropy)" for="Port scan">Port scan (Entropy):</label>
+          <input type="number" id="Port scan" name="Port scan" step="1">
+        </div>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Penalty for Regular intervals attacks (Std intervals)" for="Regular intervals">Regular intervals (Std intervals):</label>
+          <input type="number" id="Regular intervals" name="Regular intervals" step="1">
+        </div>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Penalty for Packet flood attacks (PPS)" for="Packet flood">Packet flood (PPS):</label>
+          <input type="number" id="Packet flood" name="Packet flood" step="1">
+        </div>
+
+        <br>
+        <br>
+
+        <div class="setting-item">
+          <label class="tooltip" data-tooltip="Minimum cumulative score required to enter the graylist" for="Minimum score for alert">Min. Score for Alert:</label>
+          <input type="number" id="Minimum score for alert" name="Minimum score for alert" step="1">
+        </div>
+
+        <br>
+
+        <button type="submit">
+          Save Penalties
+        </button>
+
+      </form>
+
+      <div id="penalties-status" class="empty-state"></div>
+
+    </div>
+
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+
+  <footer class="status">
+
+    <button onclick="logout()">
+      Logout
+    </button>
+
+    <button id="theme-toggle" title="Toggle theme">
+      Dark 🌙
+    </button>
+
+  </footer>
+
+</div>
+
+<script src="/static/app.js"></script>
+
+</body>
+</html>

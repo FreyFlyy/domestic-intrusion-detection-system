@@ -1,0 +1,507 @@
+/* style.css */
+
+/* =========== THEME VARIABLES =========== */
+
+
+:root {
+  --bg: #f8f9fa;
+  --text: #212529;
+  --accent: #dee2e6;
+  --danger: #dc3545;
+  --card: #ffffff;
+  --border: #dee2e6;
+  --muted: #6c757d;
+
+  --btn-bg: #0d6efd;
+  --btn-text: #ffffff;
+  --btn-hover: #0b5ed7;
+
+  --radius: 10px;
+}
+
+body.dark-theme {
+  --bg: #121212;
+  --text: #e9ecef;
+  --accent: #2c2c2c;;
+  --danger: #ff6b6b;
+  --card: #1e1e1e;
+  --border: #2c2c2c;
+  --muted: #adb5bd;
+
+  --btn-bg: #3b82f6;
+  --btn-text: #ffffff;
+  --btn-hover: #2563eb;
+
+  --radius: 10px;
+}
+
+
+/* =========== BASE =========== */
+
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+
+  background: var(--bg);
+  color: var(--text);
+
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.logo {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+
+    width: 100px;
+    height: 100px;
+
+    z-index: 1000;
+}
+
+
+/* =========== HEADER =========== */
+
+
+header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+header h1 {
+  margin-bottom: 0.3rem;
+}
+
+header p {
+  color: var(--muted);
+  margin-top: 0;
+}
+
+
+/* =========== TABS =========== */
+
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  margin-top: 1rem;
+}
+
+.tab-btn {
+  border: 1px solid var(--border);
+  background: var(--btn-bg);
+  color: var(--btn-text);
+
+  padding: 10px 16px;
+  border-radius: 8px;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.tab-btn:hover {
+  border-color: var(--btn-hover);
+}
+
+.tab-btn.active {
+  background: var(--btn-hover);
+  color: var(--btn-text);
+  border-color: var(--btn-hover);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+
+/* =========== GRID & CARDS =========== */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.card {
+  background: var(--card);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  padding: 1.2rem;
+
+  margin-bottom: 1.2rem;
+}
+
+.card h2 {
+  margin-top: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+
+/* =========== BUTTONS =========== */
+
+
+button {
+    min-height: 34px;
+    padding: 6px 10px;
+
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    border-radius: 8px;
+    border: 1px solid transparent;
+
+    background: var(--btn-bg);
+    color: var(--btn-text);
+
+    cursor: pointer;
+
+    transition: 0.15s ease;
+    white-space: nowrap;
+}
+
+button:hover {
+  background: var(--btn-hover);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+
+/* =========== CHARTS =========== */
+
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 340px;
+}
+
+
+/* =========== TABLES =========== */
+
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  min-width: 900px;
+
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 10px;
+
+  border-bottom: 1px solid var(--border);
+
+  text-align: center;
+  vertical-align: middle;
+}
+
+th {
+  background: color-mix(in srgb, var(--card) 88%, var(--text));
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+tbody tr:hover {
+  background: color-mix(in srgb, var(--card) 90%, var(--accent));
+}
+
+td code {
+  display: inline-block;
+
+  padding: 4px 6px;
+
+  border-radius: 6px;
+
+  background: rgba(0,0,0,0.08);
+  font-size: 0.9rem;
+}
+
+body.dark-theme td code {
+  background: rgba(255,255,255,0.08);
+}
+
+#graylist-table a,
+#lists-graylist-table a {
+    color: var(--text);
+}
+
+/* =========== FORMS & NOTES =========== */
+
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.setting-item label {
+  font-weight: 600;
+}
+
+.setting-item input {
+  width: 100%;
+
+  padding: 10px 12px;
+
+  border-radius: 8px;
+  border: 1px solid var(--border);
+
+  background: var(--card);
+  color: var(--text);
+
+  font-size: 0.95rem;
+}
+
+.host-note-input {
+  width: 100%;
+
+  padding: 10px 12px;
+
+  border-radius: 8px;
+  border: 1px solid var(--border);
+
+  background: var(--card);
+  color: var(--text);
+
+  font-size: 0.95rem;
+
+  box-sizing: border-box;
+}
+
+/* =========== STATES =========== */
+
+
+.error {
+  display: none;
+
+  margin-bottom: 1rem;
+
+  padding: 1rem;
+
+  border-radius: 8px;
+
+  background: rgba(220, 53, 69, 0.12);
+  border: 1px solid rgba(220, 53, 69, 0.25);
+
+  color: var(--danger);
+}
+
+.empty-state {
+  text-align: center;
+
+  padding: 1.5rem;
+
+  color: var(--muted);
+}
+
+
+/* =========== FOOTER =========== */
+
+
+footer.status {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 2rem;
+}
+
+
+/* =========== MOBILE FRIENDLY =========== */
+
+
+@media (max-width: 900px) {
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-container {
+    height: 280px;
+  }
+}
+
+@media (max-width: 700px) {
+
+  body {
+    padding: 0.75rem;
+    font-size: 14px;
+  }
+
+  header h1 {
+    font-size: 1.7rem;
+  }
+
+  header p {
+    font-size: 0.9rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  table {
+    min-width: 700px;
+    font-size: 0.82rem;
+  }
+
+  th,
+  td {
+    padding: 8px 6px;
+  }
+
+  .chart-container {
+    height: 240px;
+  }
+
+  footer.status {
+    flex-direction: column;
+  }
+
+  footer.status button {
+    width: 100%;
+  }
+
+  .tab-btn {
+    width: 100%;
+  }
+
+  button {
+    min-height: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  body {
+    padding: 0.5rem;
+  }
+
+  .card {
+    padding: 0.8rem;
+  }
+
+  table {
+    min-width: 600px;
+  }
+
+  .chart-container {
+    height: 220px;
+  }
+}
+
+@media (max-width: 700px) {
+    button {
+        width: auto;
+        min-width: 120px;
+        font-size: 0.85rem;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 700px) {
+    .logo {
+        width: 56px;
+        height: 56px;
+        top: 8px;
+        left: 8px;
+    }
+}
+
+/* =========== TOOLTIPS =========== */
+
+
+.tooltip {
+  position: relative;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 0;
+  top: 120%;
+
+  background: #111;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+
+  font-size: 12px;
+  white-space: nowrap;
+
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+
+  transition: 0.15s ease;
+  z-index: 999;
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========== IP TABLE LOOKUP =========== */
+
+.highlight-row {
+    outline: 5px solid #0d6efd;
+    transition: outline 0.3s ease;
+}
+
+.clickable-ip {
+    cursor: pointer;
+}
